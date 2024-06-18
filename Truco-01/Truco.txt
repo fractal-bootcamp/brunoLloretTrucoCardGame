@@ -1,0 +1,235 @@
+TRUCO
+
+- Deck
+    [
+        key: a {1,2,3,4,5,6,7,10,11,12,13},
+        key: b {1,2,3,4,5,6,7,10,11,12,13},
+        key: c {1,2,3,4,5,6,7,10,11,12,13},
+        key: d {1,2,3,4,5,6,7,10,11,12,13}
+    ]
+
+- Table
+    <>
+    <Title>
+    <Points>
+        <Player1 points>
+        <Player2 points>
+    <Player side>
+        [
+            turn 1 {
+                face: boolean,
+                card: value
+            },
+            turn 2 {
+                face: boolean,
+                card: value
+            },
+            turn 3 {
+
+                face: boolean,
+                card: value
+            }
+        ]
+    <NoPlayer side>
+    </>
+
+- Hands
+<>
+    <Hands Front/Back>
+        <Player 1 hand>
+        <Player 2 hand>
+</>
+
+- Victory
+    -30 points
+
+
+Mechanics:
+
+- Shuffle
+
+- Draw
+
+- First Turn
+    - Player First Turn:
+        (isTableEmpty: true)
+        (isEnvidoPossible: true)
+        - Window for Song -> Truco / Envido
+            - If Truco:
+                -NoPlayer -> Envido First / Quiero / No quiero
+                                -If NoPlayer Envido First:
+                                    -Player -> EnvidoEnvido / RealEnvido / Quiero / No Quiero
+                                        -If Player EnvidoEnvido:
+                                                -NoPlayer -> RealEnvido / Quiero / No Quiero
+                                                    -If NoPlayer RealEnvido:
+                                                        -Player -> FaltaEnvido / Quiero / No Quiero
+                                                                    -If Player FaltaEnvido:
+                                                                                        -NoPlayer -> Quiero / No Quiero
+                                                                                            -If NoPlayer Quiero:
+                                                                                                        -FALTAENVIDO 
+                                                                                            -If NoPlayer No Quiero:
+                                                                                                        -Player count + 7 
+                                                                    -If Player Quiero:
+                                                                                        -REALENVIDO 
+                                                                    -If Player No Quiero:
+                                                                                        -NoPlayer count + 4
+
+                                                    -If NoPlayer Quiero:
+                                                                    -ENVIDOENVIDO
+
+                                                    -If NoPlayer No Quiero:
+                                                                -IsTableEmpty? Player count + 3 : Player count + 2
+
+                                        -If Player RealEnvido:
+                                                    -NoPlayer -> FaltaEnvido / Quiero / No Quiero
+                                                                        -If NoPlayer FaltaEnvido:
+                                                                                            -Player -> Quiero / No Quiero
+                                                                                                -If Player Quiero:
+                                                                                                            -FALTAENVIDO 
+                                                                                                -If Player No Quiero:
+                                                                                                            -NoPlayer count + 5
+                                                                        -If NoPlayer Quiero:
+                                                                            -  REALENVIDO
+                                                                        -If NoPlayer No Quiero:
+                                                                            - Player count + 3
+                                            
+                                        -If Player Quiero:
+                                                    -ENVIDO
+                                        -If Player No Quiero:
+                                                    -IsTableEmpty? NoPlayer count + 3 : NoPlayer count + 2
+
+                        - If Quiero:
+                            - TRUCO
+                        -  If No Quiero:
+                            -IsTableEmpty? Player count + 2 : Player count + 1 
+
+            - If Envido:
+                -NoPlayer-> EnvidoEnvido / Quiero / No Quiero
+                    -If NoPlayer EnvidoEnvido:
+                        -Player-> RealEnvido / Quiero / No Quiero
+                            -If Player RealEnvido:
+                                    -NoPlayer-> FaltaEnvido / Quiero / No Quiero 
+                                        -If Quiero:
+                                            -REALENVIDO 
+                                        -If No Quiero:
+                                            -Player count + 4
+                                        -If FaltaEnvido:
+                                            -FALTAENVIDO
+                            -If Player Quiero:
+                                    -ENVIDOENVIDO
+                            -If Player No Quiero:
+                                    -IsTableEmpty? NoPlayer count + 3 : NoPlayer count + 2
+                                
+                    -If NoPlayer Quiero:
+                                -ENVIDO
+                    -If NoPlayer No Quiero:
+                                -IsTableEmpty? Player count + 2 : Player count + 1
+
+        -Window for Card -> FaceDown / FaceUp
+            -If FaceDown:
+                -Window for Song -> Truco / Envido
+                (isEnvidoPossible? Check if it was played before the card was placed)
+
+            -If FaceUp:
+                -Window for Song -> Truco / Envido
+        
+        - End of Player First Turn
+
+    - NoPlayer First Turn
+        (isTableEmpty:false)
+        (isEnvidoPossible:true)
+        (hasEnvidoHappened?)
+        (hasTrucoHappened? if yes: end of the game, new game)
+
+        - Window for Song
+        if (hasEnvidoHappened=true) -> Truco
+
+        - Window for Card -> FaceDown / FaceUp
+            -If FaceDown:
+                -Window for Song -> Truco / Envido
+                (isEnvidoPossible? Check if it was played before the card was placed)
+
+            -If FaceUp:
+                -Window for Song -> Truco / Envido
+        
+        - End of NoPlayer First Turn
+
+- Second Turn
+
+    -Player Second Turn
+        (isTableEmpty: false)
+        (isEnvidoPossible:true)
+        (hasEnvidoHappened?)
+        (hasTrucoHappened?)
+
+        - Window for Song 
+
+        - Window for Card -> FaceDown / FaceUp
+
+            -If FaceDown:
+                -Window for Song -> Truco / Envido
+                (isEnvidoPossible? Check if it was played before the card was placed)
+
+            -If FaceUp:
+                -Window for Song -> Truco / Envido
+        
+        - End of Player Second Turn
+
+    -NoPlayer Second Turn
+        (isTableEmpty: false)
+        (isEnvidoPossible:true)
+        (hasEnvidoHappened?)
+        (hasTrucoHappened?)
+
+        - Window for Song 
+
+        - Window for Card -> FaceDown / FaceUp
+
+            -If FaceDown:
+                -Window for Song -> Truco / Envido
+                (isEnvidoPossible? Check if it was played before the card was placed)
+
+            -If FaceUp:
+                -Window for Song -> Truco / Envido
+        
+    - End of NoPlayer Second Turn
+
+- Third Turn
+    -Player Third Turn
+        (isTableEmpty: false)
+        (isEnvidoPossible:false)
+        (hasEnvidoHappened?)
+        (hasTrucoHappened?)
+
+        - Window for Song 
+
+        - Window for Card -> FaceDown / FaceUp
+
+            -If FaceDown:
+                -Window for Song -> Truco
+
+            -If FaceUp:
+                -Window for Song -> Truco
+        
+        - End of Player Third Turn
+
+        -NoPlayer Third Turn
+        (isTableEmpty: false)
+        (isEnvidoPossible:false)
+        (hasEnvidoHappened?)
+        (hasTrucoHappened?)
+
+        - Window for Song 
+
+        - Window for Card -> FaceDown / FaceUp
+
+            -If FaceDown:
+                -Window for Song -> Truco
+
+            -If FaceUp:
+                -Window for Song -> Truco
+        
+        - End of NoPlayer Third Turn
+
+- End of the Game
+    
